@@ -1,0 +1,24 @@
+%html
+  %head
+    %title Drill
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"} 
+    :css
+      ol  {margin-top: 1em;}
+      li  {margin-bottom: 0.3em;}
+  %body
+    - questions.sort_by{ |q| q.index.to_i }.each do |question|
+      - [false, true].each do |answers|
+        - matches = question.content.match /^(\d+\. )(.*)/    
+        %h2
+          = matches[1]
+          = File.basename(question.file, '.*')
+          - if answers
+            (Odpowiedzi)
+        %div= matches[2]
+        %ol
+          - question.answers.each do |ans|
+            - if ans.correctness == true and answers
+              %li{style: 'text-decoration: underline;'}= ans.content
+            - else
+              %li= ans.content
+        != "<mbp:pagebreak />"
